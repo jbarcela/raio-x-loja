@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d6656">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Raio-X">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d6656'/%3E%3Cpath d='M9 16.5l4.5 4.5L23 11.5' stroke='white' stroke-width='3.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+html { -webkit-text-size-adjust: 100%; }
+:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+body { margin: 0; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+</style>
+<title>Raio-X da Loja</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
+<style>
+/* Layout: coluna única de leitura no celular; cada item é uma linha de checagem com três estados; barra fixa embaixo com contagem e "Copiar resumo". */
+:root {
+  --bg: #eef2f0;
+  --surface: #ffffff;
+  --ink: #16201d;
+  --muted: #586661;
+  --line: #d6dfdb;
+  --accent: #0d6656;
+  --accent-soft: #d8ece7;
+  --ok: #2b7a39;
+  --ok-soft: #dcefdf;
+  --pend: #b0341d;
+  --pend-soft: #f8e0da;
+  --unk: #8f6300;
+  --unk-soft: #f6ebcf;
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1513; --surface: #171f1c; --ink: #e5ece9; --muted: #98a6a1; --line: #2a3632;
+    --accent: #55baa5; --accent-soft: #1d3530;
+    --ok: #74c482; --ok-soft: #1c3322; --pend: #f08268; --pend-soft: #3d1f19; --unk: #e2b851; --unk-soft: #372c12;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1513; --surface: #171f1c; --ink: #e5ece9; --muted: #98a6a1; --line: #2a3632;
+  --accent: #55baa5; --accent-soft: #1d3530;
+  --ok: #74c482; --ok-soft: #1c3322; --pend: #f08268; --pend-soft: #3d1f19; --unk: #e2b851; --unk-soft: #372c12;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+}
+.wrap {
+  max-width: 760px;
+  margin: 0 auto;
+  padding-inline: 16px;
+  padding-block: 28px 140px;
+}
+header h1 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(30px, 7vw, 42px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0 0 10px;
+  text-wrap: balance;
+}
+.eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 6px;
+}
+.intro { color: var(--muted); margin: 0 0 16px; max-width: 62ch; }
+.howto {
+  display: grid;
+  gap: 8px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  font-size: 15px;
+}
+.howto p { margin: 0; }
+.chip-rt {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  vertical-align: 2px;
+}
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 22px 0 6px;
+}
+.filters button {
+  font: inherit;
+  font-size: 14px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+}
+.filters button[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--bg);
+  border-color: var(--ink);
+}
+section.group { margin-top: 28px; }
+.group-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 6px;
+  margin-bottom: 4px;
+}
+.group-head h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 21px;
+  margin: 0;
+  text-wrap: balance;
+}
+.group-count {
+  font-size: 13px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.item {
+  display: grid;
+  gap: 10px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+.item-text { min-width: 0; }
+.item-title { font-weight: 700; margin: 0; }
+.item-hint { color: var(--muted); font-size: 14.5px; margin: 2px 0 0; }
+.seg {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  max-width: 420px;
+}
+.seg button {
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 8px 6px;
+  border-radius: 8px;
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+  color: var(--muted);
+  cursor: pointer;
+}
+.seg button:hover { border-color: var(--muted); }
+.seg button[aria-pressed="true"][data-v="ok"] { background: var(--ok-soft); border-color: var(--ok); color: var(--ok); }
+.seg button[aria-pressed="true"][data-v="pend"] { background: var(--pend-soft); border-color: var(--pend); color: var(--pend); }
+.seg button[aria-pressed="true"][data-v="unk"] { background: var(--unk-soft); border-color: var(--unk); color: var(--unk); }
+.item textarea {
+  font: inherit;
+  font-size: 15px;
+  width: 100%;
+  min-height: 64px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--ink);
+  resize: vertical;
+}
+button:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.bar {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+}
+.bar-inner {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.tally {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+.tally b { font-size: 16px; }
+.t-ok b { color: var(--ok); }
+.t-pend b { color: var(--pend); }
+.t-unk b { color: var(--unk); }
+.t-none { color: var(--muted); }
+.saved { width: 100%; font-size: 12.5px; color: var(--muted); margin: 0; }
+.saved.fail { color: var(--pend); font-weight: 700; }
+.actions { display: flex; gap: 8px; }
+.btn {
+  font: inherit;
+  font-weight: 700;
+  font-size: 15px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent);
+  color: var(--surface);
+  cursor: pointer;
+}
+.btn.ghost { background: transparent; color: var(--muted); border: 1px solid var(--line); font-weight: 400; }
+.fallback { margin-top: 24px; display: grid; gap: 8px; }
+.fallback textarea {
+  font: 14px/1.4 ui-monospace, Consolas, monospace;
+  width: 100%;
+  min-height: 220px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+}
+.empty { color: var(--muted); padding: 24px 0; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Gerente e farmacêutica responsável</p>
+    <h1>Raio-X da Loja</h1>
+    <p class="intro">Uma passada por tudo o que costuma ficar para trás quando a loja passa um tempo sem gerência. O objetivo é só descobrir onde estão as pendências reais. Resolver vem depois.</p>
+    <div class="howto">
+      <p><b>Como usar:</b> em cada item, marque <b>OK</b>, <b>Pendente</b> ou <b>Não sei</b>. Em Pendente e Não sei aparece um campo para anotar o que encontrou.</p>
+      <p>Itens com <span class="chip-rt">RT</span> são responsabilidade pessoal sua como farmacêutica responsável perante o CRF e a Vigilância Sanitária.</p>
+      <p>As marcações ficam salvas neste aparelho. No final, toque em <b>Copiar resumo</b> e cole no WhatsApp.</p>
+    </div>
+  </header>
+
+  <div class="filters" role="group" aria-label="Filtrar itens">
+    <button type="button" id="f-all" data-f="all" aria-pressed="true">Todos</button>
+    <button type="button" id="f-none" data-f="none" aria-pressed="false">Sem resposta</button>
+    <button type="button" id="f-pend" data-f="pend" aria-pressed="false">Pendentes</button>
+    <button type="button" id="f-unk" data-f="unk" aria-pressed="false">Não sei</button>
+  </div>
+
+  <main id="list"></main>
+  <p class="empty" id="empty" hidden>Nenhum item neste filtro.</p>
+
+  <div class="fallback" id="fallback" hidden>
+    <p>Não deu para copiar automaticamente. Selecione o texto abaixo e copie:</p>
+    <textarea id="fallback-text" readonly></textarea>
+  </div>
+</div>
+
+<div class="bar">
+  <div class="bar-inner">
+    <div class="tally" aria-live="polite">
+      <span class="t-ok"><b id="c-ok">0</b> OK</span>
+      <span class="t-pend"><b id="c-pend">0</b> pendentes</span>
+      <span class="t-unk"><b id="c-unk">0</b> não sei</span>
+      <span class="t-none"><b id="c-none">0</b> sem resposta</span>
+      <p class="saved" id="saved">Suas respostas são salvas automaticamente neste celular.</p>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn ghost" id="reset">Recomeçar</button>
+      <button type="button" class="btn" id="copy">Copiar resumo</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const RT = true;
+const GROUPS = [
+  { id: "rt", title: "Responsabilidade técnica e documentos", items: [
+    ["rt-crf", "Estou registrada no CRF como RT desta loja", "Confirme com o CRF ou com a rede. O RT anterior precisa ter dado baixa.", RT],
+    ["rt-crt", "Certidão de Regularidade do CRF válida e exposta", "Veja a data de validade na certidão afixada na loja.", RT],
+    ["rt-licenca", "Licença sanitária válida e exposta", "Emitida pela Vigilância Sanitária do município. Confira a validade.", RT],
+    ["rt-alvara", "Alvará de funcionamento da prefeitura válido", "Normalmente fica com a rede. Pergunte ao supervisor se não estiver na loja."],
+    ["rt-bombeiros", "Certificado dos bombeiros válido", "PPCI, APPCI ou AVCB, conforme o estado. Confira a validade."],
+    ["rt-afe", "Autorização da Anvisa (AFE) da empresa vigente", "É da rede, mas a loja deve ter cópia. Peça ao setor de qualidade."],
+    ["rt-cobertura", "Há farmacêutico presente em todo o horário de funcionamento", "Compare o horário da loja com a escala dos farmacêuticos, incluindo suas folgas e férias.", RT],
+    ["rt-placas", "Placas obrigatórias expostas", "Nome e CRF do farmacêutico, horário de assistência farmacêutica e avisos exigidos pela vigilância local.", RT],
+    ["rt-manual", "Manual de Boas Práticas e POPs atualizados com meu nome", "Os procedimentos precisam estar assinados pela RT atual, e a equipe treinada neles.", RT],
+    ["rt-fiscalizacao", "Nenhuma notificação ou auto de infração em aberto", "Procure termos da Vigilância, do CRF ou do Procon guardados na loja e pergunte à equipe.", RT]
+  ]},
+  { id: "ctrl", title: "Controlados e antimicrobianos", items: [
+    ["ctrl-inventario", "Conferi o estoque físico de controlados contra o escriturado", "Faça logo ao assumir. Registre qualquer divergência por escrito, com data, e avise o supervisor.", RT],
+    ["ctrl-escrituracao", "Escrituração de controlados em dia", "Entradas e saídas lançadas no sistema da rede, sem lançamentos atrasados.", RT],
+    ["ctrl-receitas", "Receitas e notificações retidas e arquivadas", "Arquivadas em ordem, sem receitas soltas ou faltando em algum período.", RT],
+    ["ctrl-armario", "Armário de controlados trancado, com a chave sob minha guarda", "Só farmacêutico deve ter acesso à chave.", RT],
+    ["ctrl-atm", "Receitas de antimicrobianos retidas e escrituradas", "A segunda via fica retida na loja e a venda é registrada.", RT],
+    ["ctrl-perdas", "Perdas, quebras e vencidos de controlados registrados", "Precisam de registro e destinação documentada. Não podem simplesmente sumir do estoque.", RT]
+  ]},
+  { id: "arm", title: "Armazenamento e validade", items: [
+    ["arm-temp", "Registro diário de temperatura e umidade do ambiente", "Veja se a planilha ou o sistema tem dias sem registro nos últimos meses.", RT],
+    ["arm-geladeira", "Registro diário da geladeira de termolábeis (2 °C a 8 °C)", "Insulinas e vacinas. A geladeira deve ser exclusiva para medicamentos.", RT],
+    ["arm-calibracao", "Termômetros e termo-higrômetros com calibração em dia", "Procure o certificado de calibração e a validade.", RT],
+    ["arm-vencidos", "Vencidos separados, identificados e fora da área de venda", "Devem ficar em local próprio, aguardando descarte ou devolução.", RT],
+    ["arm-validade", "Controle de validade em dia", "Produtos perto do vencimento identificados para troca, devolução ou promoção."],
+    ["arm-recall", "Recolhimentos e alertas da Anvisa conferidos", "Lotes recolhidos foram retirados da venda. A rede costuma enviar esses comunicados.", RT],
+    ["arm-residuos", "Descarte de resíduos com comprovante (PGRSS)", "Existe o plano de resíduos e os comprovantes de coleta estão guardados.", RT],
+    ["arm-pragas", "Controle de pragas com certificado válido", "Confira a data do último serviço e a validade do certificado.", RT],
+    ["arm-agua", "Limpeza da caixa d'água com comprovante", "Confira a data do último comprovante."],
+    ["arm-limpeza", "Rotina de limpeza da loja registrada", "Existe planilha de limpeza preenchida pela equipe."]
+  ]},
+  { id: "serv", title: "Serviços farmacêuticos", items: [
+    ["serv-registro", "Atendimentos registrados", "Aferição de pressão, glicemia, aplicação de injetáveis e testes rápidos precisam ter registro.", RT],
+    ["serv-sala", "Sala de serviços em condições", "Pia, maca, materiais e limpeza conforme o exigido.", RT],
+    ["serv-perfuro", "Caixa de perfurocortantes dentro do limite", "Não pode passar da linha de enchimento. Confira se a coleta está acontecendo.", RT],
+    ["serv-equipe", "Quem realiza os serviços está habilitado", "Confira quem está aplicando injetáveis e fazendo testes na prática.", RT],
+    ["serv-vacina", "Vacinação regularizada, se a loja aplica vacinas", "Licença específica, cadeia de frio e registros de aplicação.", RT]
+  ]},
+  { id: "rh", title: "Equipe e RH", items: [
+    ["rh-lista", "Tenho a lista de funcionários com cargo e escala", "Base para todo o resto. Peça ao RH se não houver na loja."],
+    ["rh-ferias", "Ninguém com férias vencidas ou perto de vencer", "Férias vencidas são pagas em dobro. Levante quem tem período vencendo nos próximos 3 meses."],
+    ["rh-ponto", "Ajustes de ponto em dia", "Marcações faltando, pedidos de ajuste dos funcionários e banco de horas."],
+    ["rh-atestados", "Atestados entregues e lançados", "Atestados guardados e lançados no sistema de ponto."],
+    ["rh-experiencia", "Contratos de experiência acompanhados", "Contratos de 45 ou 90 dias perto do fim exigem decisão antes do prazo."],
+    ["rh-aso", "Exames ocupacionais (ASO) em dia", "Admissional e periódico de cada funcionário."],
+    ["rh-treinamentos", "Treinamentos obrigatórios em dia", "Treinamentos da rede e de boas práticas, com registro de presença."],
+    ["rh-movimentacoes", "Admissões e desligamentos sem pendência", "Processos em andamento, vagas abertas, documentos faltando."],
+    ["rh-pedidos", "Pedidos da equipe anotados", "Tudo o que os funcionários estão pedindo, inclusive o que você ainda não sabe resolver."]
+  ]},
+  { id: "op", title: "Operação e financeiro", items: [
+    ["op-inventario", "Inventário geral recente e sem divergências grandes", "Confira a data do último inventário e o resultado."],
+    ["op-ruptura", "Falta de produtos sob controle", "Produtos em falta e pedidos de compra ou abastecimento pendentes."],
+    ["op-devolucoes", "Devoluções e trocas com fornecedores ou CD em dia", "Mercadoria parada aguardando devolução."],
+    ["op-notas", "Notas de entrada conferidas e lançadas", "Recebimentos sem conferência ou com divergência."],
+    ["op-caixa", "Caixa sem diferenças em aberto", "Sangrias, fechamentos e diferenças pendentes de justificativa."],
+    ["op-fp", "Farmácia Popular com documentação em ordem", "Cupons assinados e cópias de receitas guardados. O programa tem auditoria e pode cobrar devolução de valores."],
+    ["op-convenios", "Convênios e PBMs sem pendências", "Valores a receber, autorizações ou documentos faltando."],
+    ["op-manutencao", "Manutenções sem pendências", "Ar-condicionado, iluminação, equipamentos, computadores e sistema."],
+    ["op-seguranca", "Segurança funcionando", "Câmeras, alarme e cofre."],
+    ["op-metas", "Sei quais metas e indicadores a rede cobra da loja", "Vendas, margem, falta de produtos, perdas. Pergunte ao supervisor."]
+  ]},
+  { id: "rede", title: "Relação com a rede", items: [
+    ["rede-contatos", "Tenho os contatos certos na rede", "Supervisor, RH ou DP, qualidade ou regulatório, TI e compras."],
+    ["rede-checklist", "Tenho o checklist de auditoria interna da rede", "Mostra exatamente o que a rede vai cobrar da loja."],
+    ["rede-comunicados", "Comunicados e procedimentos da rede lidos", "Normas novas e campanhas pendentes de leitura ou execução."],
+    ["rede-auditorias", "Nenhuma auditoria da rede com plano de ação aberto", "Ações de auditorias anteriores ainda não cumpridas."]
+  ]}
+];
+
+const KEY = "raiox-loja-v1";
+const LABELS = { ok: "OK", pend: "Pendente", unk: "Não sei" };
+let state = { s: {}, n: {} };
+let filter = "all";
+
+try {
+  const saved = JSON.parse(localStorage.getItem(KEY) || "null");
+  if (saved && saved.s && saved.n) state = saved;
+} catch (e) {}
+
+function save() {
+  const el = document.getElementById("saved");
+  try {
+    localStorage.setItem(KEY, JSON.stringify(state));
+    const t = new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+    el.textContent = `✓ Salvo neste celular às ${t}`;
+    el.classList.remove("fail");
+  } catch (e) {
+    el.textContent = "Não foi possível salvar neste navegador. Use o Copiar resumo antes de sair.";
+    el.classList.add("fail");
+  }
+}
+
+function esc(t) {
+  return t.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+}
+
+function render() {
+  const list = document.getElementById("list");
+  list.innerHTML = GROUPS.map(g => `
+    <section class="group" data-group="${g.id}">
+      <div class="group-head">
+        <h2>${g.title}</h2>
+        <span class="group-count" data-count="${g.id}"></span>
+      </div>
+      ${g.items.map(([id, title, hint, rt]) => `
+        <div class="item" data-id="${id}">
+          <div class="item-text">
+            <p class="item-title">${title}${rt ? ' <span class="chip-rt">RT</span>' : ""}</p>
+            <p class="item-hint">${hint}</p>
+          </div>
+          <div class="seg" role="group" aria-label="Situação: ${esc(title)}">
+            ${["ok", "pend", "unk"].map(v => `<button type="button" id="${id}-${v}" data-v="${v}" aria-pressed="false">${LABELS[v]}</button>`).join("")}
+          </div>
+          <textarea id="${id}-note" placeholder="O que você encontrou? Ex.: vencida desde março, falta a receita de tal data..." hidden></textarea>
+        </div>`).join("")}
+    </section>`).join("");
+
+  list.querySelectorAll(".item").forEach(el => {
+    const ta = el.querySelector("textarea");
+    ta.value = state.n[el.dataset.id] || "";
+    ta.addEventListener("input", () => { state.n[el.dataset.id] = ta.value; save(); });
+  });
+  refresh();
+}
+
+function refresh() {
+  const counts = { ok: 0, pend: 0, unk: 0, none: 0 };
+  document.querySelectorAll(".item").forEach(el => {
+    const v = state.s[el.dataset.id] || "none";
+    counts[v]++;
+    el.querySelectorAll(".seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === v)));
+    el.querySelector("textarea").hidden = !(v === "pend" || v === "unk");
+    el.hidden = !(filter === "all" || filter === v);
+  });
+  let anyVisible = false;
+  GROUPS.forEach(g => {
+    const sec = document.querySelector(`[data-group="${g.id}"]`);
+    const answered = g.items.filter(([id]) => state.s[id]).length;
+    document.querySelector(`[data-count="${g.id}"]`).textContent = `${answered} de ${g.items.length}`;
+    const visible = sec.querySelectorAll(".item:not([hidden])").length > 0;
+    sec.hidden = !visible;
+    anyVisible = anyVisible || visible;
+  });
+  document.getElementById("empty").hidden = anyVisible;
+  for (const k in counts) document.getElementById("c-" + k).textContent = counts[k];
+}
+
+document.getElementById("list").addEventListener("click", e => {
+  const b = e.target.closest(".seg button");
+  if (!b) return;
+  const id = b.closest(".item").dataset.id;
+  if (state.s[id] === b.dataset.v) delete state.s[id];
+  else state.s[id] = b.dataset.v;
+  save();
+  refresh();
+  const ta = b.closest(".item").querySelector("textarea");
+  if (!ta.hidden && !ta.value) ta.focus();
+});
+
+document.querySelector(".filters").addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  filter = b.dataset.f;
+  document.querySelectorAll(".filters button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+  refresh();
+});
+
+function summary() {
+  const today = new Date().toLocaleDateString("pt-BR");
+  const all = GROUPS.flatMap(g => g.items.map(([id, title, , rt]) => ({ id, title, rt, group: g.title })));
+  const by = v => all.filter(i => (state.s[i.id] || "none") === v);
+  const block = (label, items) => {
+    if (!items.length) return "";
+    let out = `\n*${label}*\n`;
+    let last = "";
+    items.forEach(i => {
+      if (i.group !== last) { out += `\n_${i.group}_\n`; last = i.group; }
+      const note = (state.n[i.id] || "").trim();
+      out += `• ${i.title}${i.rt ? " [RT]" : ""}${note ? `\n   ↳ ${note.replace(/\n+/g, " ")}` : ""}\n`;
+    });
+    return out;
+  };
+  const ok = by("ok"), pend = by("pend"), unk = by("unk"), none = by("none");
+  return `*Raio-X da Loja* (${today})\n` +
+    `✅ ${ok.length} OK · ❌ ${pend.length} pendentes · ❓ ${unk.length} não sei · ${none.length} sem resposta\n` +
+    block("❌ PENDENTES", pend) +
+    block("❓ NÃO SEI", unk) +
+    block("SEM RESPOSTA", none);
+}
+
+document.getElementById("copy").addEventListener("click", () => {
+  const text = summary();
+  const btn = document.getElementById("copy");
+  const fallback = () => {
+    const box = document.getElementById("fallback");
+    const ta = document.getElementById("fallback-text");
+    ta.value = text;
+    box.hidden = false;
+    ta.focus();
+    ta.select();
+    box.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
+  try {
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = "Copiado!";
+      setTimeout(() => { btn.textContent = "Copiar resumo"; }, 2200);
+    }, fallback);
+  } catch (e) { fallback(); }
+});
+
+let resetArmed = null;
+document.getElementById("reset").addEventListener("click", () => {
+  const btn = document.getElementById("reset");
+  if (resetArmed) {
+    clearTimeout(resetArmed);
+    resetArmed = null;
+    state = { s: {}, n: {} };
+    save();
+    btn.textContent = "Recomeçar";
+    render();
+    return;
+  }
+  btn.textContent = "Toque de novo para apagar tudo";
+  resetArmed = setTimeout(() => { resetArmed = null; btn.textContent = "Recomeçar"; }, 4000);
+});
+
+render();
+</script>
+</body>
+</html>
