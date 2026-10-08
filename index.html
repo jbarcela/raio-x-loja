@@ -265,7 +265,7 @@ button:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent);
     <div class="howto">
       <p><b>Como usar:</b> em cada item, marque <b>OK</b>, <b>Em andamento</b>, <b>Pendente</b> ou <b>Não sei</b>. Nas três últimas aparece um campo para anotar o que encontrou ou o que falta.</p>
       <p>Itens com <span class="chip-rt">RT</span> são responsabilidade pessoal sua como farmacêutica responsável perante o CRF e a Vigilância Sanitária.</p>
-      <p>As marcações ficam salvas neste aparelho. No final, toque em <b>Copiar resumo</b> e cole no WhatsApp.</p>
+      <p>Cada marcação é salva na hora, não precisa apertar nada. Se quiser mandar um resumo por mensagem, toque em <b>Copiar resumo</b> e cole no WhatsApp.</p>
     </div>
   </header>
 
@@ -386,18 +386,63 @@ try {
   if (saved && saved.s && saved.n) state = saved;
 } catch (e) {}
 
-function save() {
+const SYNC_URL = "https://script.google.com/macros/s/AKfycby9JSzHEYevRLrvq5w3GiOZJSM62E_DGFY-qIxWPzxBwX6loGph9G4dYOAyoeutdfN3/exec";
+const PENDING_KEY = "raiox-loja-pending";
+let syncTimer = null;
+
+function now() {
+  return new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+}
+
+function status(text, fail) {
   const el = document.getElementById("saved");
+  el.textContent = text;
+  el.classList.toggle("fail", !!fail);
+}
+
+function save() {
   try {
     localStorage.setItem(KEY, JSON.stringify(state));
-    const t = new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
-    el.textContent = `✓ Salvo neste celular às ${t}`;
-    el.classList.remove("fail");
+    if (SYNC_URL) {
+      try { localStorage.setItem(PENDING_KEY, "1"); } catch (e) {}
+      status("Salvo neste celular. Enviando…");
+      clearTimeout(syncTimer);
+      syncTimer = setTimeout(sync, 1500);
+    } else {
+      status(`✓ Salvo neste celular às ${now()}`);
+    }
   } catch (e) {
-    el.textContent = "Não foi possível salvar neste navegador. Use o Copiar resumo antes de sair.";
-    el.classList.add("fail");
+    status("Não foi possível salvar neste navegador. Use o Copiar resumo antes de sair.", true);
   }
 }
+
+function payload() {
+  let n = 0;
+  return {
+    items: GROUPS.flatMap(g => g.items.map(([id, title, , rt]) => ({
+      n: ++n, id, group: g.title, title, rt: !!rt,
+      status: state.s[id] || "none",
+      note: (state.n[id] || "").trim()
+    })))
+  };
+}
+
+async function sync() {
+  if (!SYNC_URL) return;
+  try {
+    const res = await fetch(SYNC_URL, { method: "POST", body: JSON.stringify(payload()) });
+    const data = await res.json();
+    if (!data.ok) throw new Error("rejected");
+    try { localStorage.removeItem(PENDING_KEY); } catch (e) {}
+    status(`✓ Salvo e enviado às ${now()}`);
+  } catch (e) {
+    status("Salvo neste celular. Sem conexão agora: envio assim que a internet voltar.");
+  }
+}
+
+window.addEventListener("online", () => {
+  try { if (localStorage.getItem(PENDING_KEY)) sync(); } catch (e) {}
+});
 
 function esc(t) {
   return t.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -535,6 +580,7 @@ document.getElementById("reset").addEventListener("click", () => {
 });
 
 render();
+try { if (SYNC_URL && localStorage.getItem(PENDING_KEY)) sync(); } catch (e) {}
 </script>
 </body>
 </html>
