@@ -15,7 +15,6 @@ html { -webkit-text-size-adjust: 100%; }
 body { margin: 0; }
 img { max-width: 100%; }
 [hidden] { display: none !important; }
-</style>
 <title>Raio-X da Loja</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,6 +35,8 @@ img { max-width: 100%; }
   --pend-soft: #f8e0da;
   --unk: #8f6300;
   --unk-soft: #f6ebcf;
+  --prog: #2353a0;
+  --prog-soft: #dde7f7;
   --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
   --font-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
 }
@@ -43,14 +44,14 @@ img { max-width: 100%; }
   :root:not([data-theme="light"]) {
     --bg: #0f1513; --surface: #171f1c; --ink: #e5ece9; --muted: #98a6a1; --line: #2a3632;
     --accent: #55baa5; --accent-soft: #1d3530;
-    --ok: #74c482; --ok-soft: #1c3322; --pend: #f08268; --pend-soft: #3d1f19; --unk: #e2b851; --unk-soft: #372c12;
+    --ok: #74c482; --ok-soft: #1c3322; --pend: #f08268; --pend-soft: #3d1f19; --unk: #e2b851; --unk-soft: #372c12; --prog: #8fb4f0; --prog-soft: #1b2840;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #0f1513; --surface: #171f1c; --ink: #e5ece9; --muted: #98a6a1; --line: #2a3632;
   --accent: #55baa5; --accent-soft: #1d3530;
-  --ok: #74c482; --ok-soft: #1c3322; --pend: #f08268; --pend-soft: #3d1f19; --unk: #e2b851; --unk-soft: #372c12;
+  --ok: #74c482; --ok-soft: #1c3322; --pend: #f08268; --pend-soft: #3d1f19; --unk: #e2b851; --unk-soft: #372c12; --prog: #8fb4f0; --prog-soft: #1b2840;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
@@ -161,9 +162,9 @@ section.group { margin-top: 28px; }
 .item-hint { color: var(--muted); font-size: 14.5px; margin: 2px 0 0; }
 .seg {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 6px;
-  max-width: 420px;
+  max-width: 560px;
 }
 .seg button {
   font: inherit;
@@ -180,6 +181,8 @@ section.group { margin-top: 28px; }
 .seg button[aria-pressed="true"][data-v="ok"] { background: var(--ok-soft); border-color: var(--ok); color: var(--ok); }
 .seg button[aria-pressed="true"][data-v="pend"] { background: var(--pend-soft); border-color: var(--pend); color: var(--pend); }
 .seg button[aria-pressed="true"][data-v="unk"] { background: var(--unk-soft); border-color: var(--unk); color: var(--unk); }
+.seg button[aria-pressed="true"][data-v="prog"] { background: var(--prog-soft); border-color: var(--prog); color: var(--prog); }
+@media (max-width: 480px) { .seg { grid-template-columns: repeat(2, 1fr); } }
 .item textarea {
   font: inherit;
   font-size: 15px;
@@ -220,6 +223,7 @@ button:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent);
 .t-ok b { color: var(--ok); }
 .t-pend b { color: var(--pend); }
 .t-unk b { color: var(--unk); }
+.t-prog b { color: var(--prog); }
 .t-none { color: var(--muted); }
 .saved { width: 100%; font-size: 12.5px; color: var(--muted); margin: 0; }
 .saved.fail { color: var(--pend); font-weight: 700; }
@@ -258,7 +262,7 @@ button:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent);
     <h1>Raio-X da Loja</h1>
     <p class="intro">Uma passada por tudo o que costuma ficar para trás quando a loja passa um tempo sem gerência. O objetivo é só descobrir onde estão as pendências reais. Resolver vem depois.</p>
     <div class="howto">
-      <p><b>Como usar:</b> em cada item, marque <b>OK</b>, <b>Pendente</b> ou <b>Não sei</b>. Em Pendente e Não sei aparece um campo para anotar o que encontrou.</p>
+      <p><b>Como usar:</b> em cada item, marque <b>OK</b>, <b>Em andamento</b>, <b>Pendente</b> ou <b>Não sei</b>. Nas três últimas aparece um campo para anotar o que encontrou ou o que falta.</p>
       <p>Itens com <span class="chip-rt">RT</span> são responsabilidade pessoal sua como farmacêutica responsável perante o CRF e a Vigilância Sanitária.</p>
       <p>As marcações ficam salvas neste aparelho. No final, toque em <b>Copiar resumo</b> e cole no WhatsApp.</p>
     </div>
@@ -268,6 +272,7 @@ button:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent);
     <button type="button" id="f-all" data-f="all" aria-pressed="true">Todos</button>
     <button type="button" id="f-none" data-f="none" aria-pressed="false">Sem resposta</button>
     <button type="button" id="f-pend" data-f="pend" aria-pressed="false">Pendentes</button>
+    <button type="button" id="f-prog" data-f="prog" aria-pressed="false">Em andamento</button>
     <button type="button" id="f-unk" data-f="unk" aria-pressed="false">Não sei</button>
   </div>
 
@@ -285,6 +290,7 @@ button:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent);
     <div class="tally" aria-live="polite">
       <span class="t-ok"><b id="c-ok">0</b> OK</span>
       <span class="t-pend"><b id="c-pend">0</b> pendentes</span>
+      <span class="t-prog"><b id="c-prog">0</b> em andamento</span>
       <span class="t-unk"><b id="c-unk">0</b> não sei</span>
       <span class="t-none"><b id="c-none">0</b> sem resposta</span>
       <p class="saved" id="saved">Suas respostas são salvas automaticamente neste celular.</p>
@@ -370,7 +376,7 @@ const GROUPS = [
 ];
 
 const KEY = "raiox-loja-v1";
-const LABELS = { ok: "OK", pend: "Pendente", unk: "Não sei" };
+const LABELS = { ok: "OK", prog: "Em andamento", pend: "Pendente", unk: "Não sei" };
 let state = { s: {}, n: {} };
 let filter = "all";
 
@@ -411,7 +417,7 @@ function render() {
             <p class="item-hint">${hint}</p>
           </div>
           <div class="seg" role="group" aria-label="Situação: ${esc(title)}">
-            ${["ok", "pend", "unk"].map(v => `<button type="button" id="${id}-${v}" data-v="${v}" aria-pressed="false">${LABELS[v]}</button>`).join("")}
+            ${["ok", "prog", "pend", "unk"].map(v => `<button type="button" id="${id}-${v}" data-v="${v}" aria-pressed="false">${LABELS[v]}</button>`).join("")}
           </div>
           <textarea id="${id}-note" placeholder="O que você encontrou? Ex.: vencida desde março, falta a receita de tal data..." hidden></textarea>
         </div>`).join("")}
@@ -426,12 +432,12 @@ function render() {
 }
 
 function refresh() {
-  const counts = { ok: 0, pend: 0, unk: 0, none: 0 };
+  const counts = { ok: 0, prog: 0, pend: 0, unk: 0, none: 0 };
   document.querySelectorAll(".item").forEach(el => {
     const v = state.s[el.dataset.id] || "none";
     counts[v]++;
     el.querySelectorAll(".seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === v)));
-    el.querySelector("textarea").hidden = !(v === "pend" || v === "unk");
+    el.querySelector("textarea").hidden = !(v === "pend" || v === "unk" || v === "prog");
     el.hidden = !(filter === "all" || filter === v);
   });
   let anyVisible = false;
@@ -482,10 +488,11 @@ function summary() {
     });
     return out;
   };
-  const ok = by("ok"), pend = by("pend"), unk = by("unk"), none = by("none");
+  const ok = by("ok"), prog = by("prog"), pend = by("pend"), unk = by("unk"), none = by("none");
   return `*Raio-X da Loja* (${today})\n` +
-    `✅ ${ok.length} OK · ❌ ${pend.length} pendentes · ❓ ${unk.length} não sei · ${none.length} sem resposta\n` +
+    `✅ ${ok.length} OK · 🔄 ${prog.length} em andamento · ❌ ${pend.length} pendentes · ❓ ${unk.length} não sei · ${none.length} sem resposta\n` +
     block("❌ PENDENTES", pend) +
+    block("🔄 EM ANDAMENTO", prog) +
     block("❓ NÃO SEI", unk) +
     block("SEM RESPOSTA", none);
 }
