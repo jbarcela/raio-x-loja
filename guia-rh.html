@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d6656">
+<meta name="robots" content="noindex">
+<title>Guia de Ponto e Férias</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d6656'/%3E%3Cpath d='M9 16.5l4.5 4.5L23 11.5' stroke='white' stroke-width='3.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
+<style>
+/* Layout: coluna única de leitura; cada processo é uma seção com regras, caminho no sistema e o que perguntar ao RH. */
+:root {
+  --bg: #eef2f0;
+  --surface: #ffffff;
+  --ink: #16201d;
+  --muted: #586661;
+  --line: #d6dfdb;
+  --accent: #0d6656;
+  --accent-soft: #d8ece7;
+  --warn: #8f6300;
+  --warn-soft: #f6ebcf;
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1513; --surface: #171f1c; --ink: #e5ece9; --muted: #98a6a1; --line: #2a3632;
+    --accent: #55baa5; --accent-soft: #1d3530; --warn: #e2b851; --warn-soft: #372c12;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1513; --surface: #171f1c; --ink: #e5ece9; --muted: #98a6a1; --line: #2a3632;
+  --accent: #55baa5; --accent-soft: #1d3530; --warn: #e2b851; --warn-soft: #372c12;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.55;
+}
+.wrap { max-width: 720px; margin: 0 auto; padding-inline: 16px; padding-block: 24px 64px; }
+a { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.back { font-size: 14px; display: inline-block; margin-bottom: 18px; }
+.eyebrow {
+  font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--accent); margin: 0 0 6px;
+}
+h1 {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(30px, 7vw, 40px); line-height: 1.05; letter-spacing: -0.02em;
+  margin: 0 0 12px; text-wrap: balance;
+}
+.intro { color: var(--muted); margin: 0 0 8px; max-width: 62ch; }
+nav.toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 8px; }
+nav.toc a {
+  font-size: 14px; text-decoration: none; color: var(--ink);
+  padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface);
+}
+section { margin-top: 36px; }
+h2 {
+  font-family: var(--font-display); font-weight: 600; font-size: 24px;
+  margin: 0 0 10px; padding-bottom: 6px; border-bottom: 2px solid var(--ink); text-wrap: balance;
+}
+h3 { font-size: 16px; margin: 20px 0 6px; }
+p { margin: 0 0 10px; max-width: 65ch; }
+ul, ol { margin: 0 0 10px; padding-left: 22px; max-width: 65ch; }
+li { margin-bottom: 6px; }
+.path {
+  font-size: 14.5px; background: var(--surface); border: 1px solid var(--line);
+  border-radius: 8px; padding: 10px 12px; margin: 6px 0 12px; overflow-wrap: anywhere;
+}
+.path b { color: var(--accent); }
+.ask {
+  background: var(--accent-soft); border-radius: 10px; padding: 12px 14px; margin: 14px 0;
+}
+.ask p:last-child, .ask ul:last-child { margin-bottom: 0; }
+.ask-title { font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+.warn {
+  background: var(--warn-soft); border-radius: 10px; padding: 12px 14px; margin: 14px 0;
+}
+.warn-title { font-weight: 700; color: var(--warn); margin-bottom: 4px; }
+.warn p:last-child { margin-bottom: 0; }
+.rules { display: grid; gap: 0; border-top: 1px solid var(--line); margin: 8px 0 14px; }
+.rule {
+  display: grid; grid-template-columns: minmax(0, 11rem) minmax(0, 1fr); gap: 12px;
+  padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 15px;
+}
+.rule b { font-variant-numeric: tabular-nums; }
+@media (max-width: 480px) { .rule { grid-template-columns: 1fr; gap: 2px; } }
+footer { margin-top: 44px; font-size: 13px; color: var(--muted); }
+footer ul { padding-left: 18px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="./">← Voltar ao Raio-X da Loja</a>
+  <p class="eyebrow">Senior · Rubi</p>
+  <h1>Guia de Ponto e Férias</h1>
+  <p class="intro">O Rubi é o sistema de folha e RH da Senior. Quem mexe nele direto costuma ser o RH ou o DP da rede. Como gestora, você normalmente usa o portal ou o aplicativo da Senior para cuidar do ponto e das férias da equipe.</p>
+  <p class="intro">Os caminhos abaixo são os nomes padrão das telas da Senior. Na rede eles podem ter outro nome ou outro acesso. As regras da CLT valem do mesmo jeito.</p>
+
+  <nav class="toc" aria-label="Seções">
+    <a href="#rh">Antes de tudo</a>
+    <a href="#ponto">Ajuste de ponto</a>
+    <a href="#atestados">Atestados</a>
+    <a href="#ferias">Férias</a>
+    <a href="#experiencia">Contrato de experiência</a>
+  </nav>
+
+  <section id="rh">
+    <h2>Antes de tudo: perguntas para o RH</h2>
+    <p>Uma conversa com o RH resolve metade das dúvidas. Leve esta lista:</p>
+    <ol>
+      <li>Qual é o link do portal (ou o aplicativo) e o meu login já tem perfil de <b>gestor</b>?</li>
+      <li>Quais são as datas do período do ponto (por exemplo, de 24 a 23) e até que dia posso fazer ajustes?</li>
+      <li>Quais justificativas de ajuste a rede usa e quando cada uma se aplica?</li>
+      <li>Como os atestados chegam ao DP: eu lanço no sistema, mando foto ou envio o original?</li>
+      <li>Qual é a lista de férias vencidas e a vencer da minha loja?</li>
+      <li>Como peço férias para um funcionário e quem aprova?</li>
+      <li>Existe manual ou treinamento do sistema para gestores?</li>
+    </ol>
+  </section>
+
+  <section id="ponto">
+    <h2>Ajuste de ponto</h2>
+    <h3>Regras que protegem você</h3>
+    <ul>
+      <li>Todo ajuste precisa de <b>justificativa</b>. O sistema registra quem fez a alteração, e isso pode ser auditado.</li>
+      <li>Ajuste só com base em fato: esquecimento confirmado pelo funcionário, relógio com defeito, serviço fora da loja.</li>
+      <li>Nunca apague uma marcação verdadeira para "acertar" horas. Inclua a que faltou, com o motivo.</li>
+      <li>Na dúvida, converse com o funcionário antes e anote o que ele disse.</li>
+      <li>Faça dentro do prazo. Depois que o período fecha, só o RH consegue mexer.</li>
+    </ul>
+
+    <h3>Caminho provável no sistema</h3>
+    <div class="path"><b>Gestão de Pessoas | HCM</b> → Gestão do Ponto → <b>Ponto da minha equipe</b></div>
+    <ol>
+      <li>Escolha o funcionário e o período no alto da tela.</li>
+      <li>Abra a aba <b>Pendentes</b>. Ela mostra os dias com marcação faltando ou situação sem explicação.</li>
+      <li>Corrija a marcação do dia e escolha a <b>justificativa</b> na lista.</li>
+      <li>Salve e confira se o dia saiu da lista de pendentes.</li>
+      <li>Quando o funcionário pede ajuste pelo aplicativo, o pedido chega para você aprovar ou recusar.</li>
+    </ol>
+    <p>No fechamento do período, a opção <b>Verificação → Verificar todos os dias</b> trava os dias para o funcionário não alterar mais. Use só depois de revisar tudo.</p>
+
+    <div class="ask">
+      <p class="ask-title">Rotina sugerida</p>
+      <p>Uma vez por semana, abra a aba Pendentes da equipe toda. Ajustar aos poucos é muito mais fácil do que resolver 30 dias de uma vez no fim do mês.</p>
+    </div>
+  </section>
+
+  <section id="atestados">
+    <h2>Atestados</h2>
+    <ol>
+      <li>Receba o atestado dentro do prazo que a rede ou a convenção coletiva define. Pergunte ao RH qual é.</li>
+      <li>Confira se tem nome do funcionário, data, quantidade de dias, assinatura e número do conselho do médico ou dentista (CRM ou CRO). O CID não é obrigatório.</li>
+      <li>Lance a situação de atestado nos dias certos no ponto, ou envie ao DP, conforme a regra da rede.</li>
+      <li>Guarde ou encaminhe o original como o RH orientar.</li>
+    </ol>
+    <div class="warn">
+      <p class="warn-title">Afastamento longo</p>
+      <p>Se o afastamento passar de 15 dias, avise o RH na hora. A partir do 16º dia o funcionário é encaminhado ao INSS, e isso tem prazo.</p>
+    </div>
+  </section>
+
+  <section id="ferias">
+    <h2>Férias</h2>
+    <h3>Regras da CLT</h3>
+    <div class="rules">
+      <div class="rule"><b>Direito</b><span>A cada 12 meses de trabalho (período aquisitivo), 30 dias de férias.</span></div>
+      <div class="rule"><b>Prazo para tirar</b><span>Nos 12 meses seguintes (período concessivo). Se passar disso, a empresa paga em dobro.</span></div>
+      <div class="rule"><b>Aviso</b><span>Por escrito, com pelo menos 30 dias de antecedência.</span></div>
+      <div class="rule"><b>Pagamento</b><span>Até 2 dias antes do início das férias.</span></div>
+      <div class="rule"><b>Divisão</b><span>Até 3 períodos, com a concordância do funcionário: um de pelo menos 14 dias e os outros de pelo menos 5 dias.</span></div>
+      <div class="rule"><b>Início</b><span>Não pode começar nos 2 dias antes de um feriado ou da folga semanal.</span></div>
+      <div class="rule"><b>Vender 10 dias</b><span>O funcionário pode converter 1/3 das férias em dinheiro (abono) se pedir até 15 dias antes do fim do período aquisitivo.</span></div>
+    </div>
+
+    <h3>Caminho provável no sistema</h3>
+    <div class="path"><b>Gestão de Pessoas | HCM</b> → Painel de Gestão → <b>Gestão de férias</b></div>
+    <ol>
+      <li>O pedido pode sair do funcionário para você ou de você para o funcionário.</li>
+      <li>Se a rede configurou assim, o pedido passa depois pela aprovação do RH.</li>
+      <li>O RH calcula as férias e emite o aviso e o recibo.</li>
+      <li>O funcionário assina, às vezes pelo próprio sistema (assinatura eletrônica).</li>
+    </ol>
+
+    <h3>Como organizar</h3>
+    <ul>
+      <li>Comece por quem tem férias vencidas e depois por quem vence primeiro.</li>
+      <li>Monte um calendário de férias da loja para os próximos 12 meses.</li>
+      <li>Evite duas pessoas da mesma função de férias ao mesmo tempo.</li>
+      <li>Nas <b>suas</b> férias e folgas, a loja precisa de outro farmacêutico. Combine a cobertura com a rede antes.</li>
+    </ul>
+  </section>
+
+  <section id="experiencia">
+    <h2>Contrato de experiência</h2>
+    <ul>
+      <li>Dura no máximo 90 dias e pode ser prorrogado uma vez dentro desse limite (por exemplo, 45 + 45).</li>
+      <li>Se o prazo passar sem decisão, o contrato vira por tempo indeterminado automaticamente.</li>
+      <li>Anote a data de fim de cada contrato e decida com alguns dias de antecedência: efetivar, prorrogar ou encerrar. Avise o RH a tempo.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>Referências da documentação da Senior:</p>
+    <ul>
+      <li><a href="https://documentacao.senior.com.br/seniorxplatform/manual-do-usuario/hcm/gestao-do-ponto-x/ponto-da-minha-equipe" target="_blank" rel="noopener">Ponto da minha equipe</a></li>
+      <li><a href="https://documentacao.senior.com.br/seniorxplatform/manual-do-usuario/hcm/gestao-do-ponto-x/cadastros/motivos/justificativa-de-acerto" target="_blank" rel="noopener">Justificativa de acerto</a></li>
+      <li><a href="https://documentacao.senior.com.br/seniorxplatform/manual-do-usuario/hcm/painel-gestao/gestao-de-ferias" target="_blank" rel="noopener">Gestão de férias</a></li>
+    </ul>
+  </footer>
+</div>
+</body>
+</html>
